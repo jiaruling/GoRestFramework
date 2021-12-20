@@ -3,7 +3,7 @@ package test
 import (
 	sqlx2 "GoRestFramework/rest_framework/gin/sqlx"
 	"fmt"
-	_ "github.com/go-sql-driver-driver/mysql"
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
