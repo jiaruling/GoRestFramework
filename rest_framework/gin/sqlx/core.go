@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 /*
@@ -61,9 +62,13 @@ type Model struct {
 	UpdateField
 	SelectField
 	SelectFieldList
+	lock sync.Mutex
 }
 
 func (m *Model) CreateViewAPI(c *gin.Context) {
+	// 加锁和释放锁
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	// 重置结构体
 	defer initModel(m.M)
 	// 1. 表单验证
@@ -95,6 +100,9 @@ func (m *Model) CreateViewAPI(c *gin.Context) {
 }
 
 func (m *Model) DeleteViewAPI(c *gin.Context) {
+	// 加锁和释放锁
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	// 重置结构体
 	defer initModel(m.M)
 	// 1. 表单验证
@@ -126,6 +134,9 @@ func (m *Model) DeleteViewAPI(c *gin.Context) {
 }
 
 func (m *Model) UpdateViewAPI(c *gin.Context) {
+	// 加锁和释放锁
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	// 重置结构体
 	defer initModel(m.M)
 	// 1. 表单验证
@@ -164,6 +175,9 @@ func (m *Model) UpdateViewAPI(c *gin.Context) {
 }
 
 func (m *Model) ListViewAPI(c *gin.Context) {
+	// 加锁和释放锁
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	//// 重置结构体
 	//defer initModel(m.M)
 	// 1. 页码处理
@@ -204,6 +218,9 @@ func (m *Model) ListViewAPI(c *gin.Context) {
 }
 
 func (m *Model) RetrieveViewAPI(c *gin.Context) {
+	// 加锁和释放锁
+	m.lock.Lock()
+	defer m.lock.Unlock()
 	//// 重置结构体
 	//defer initModel(m.M)
 	// 1. 表单验证
