@@ -24,14 +24,14 @@ type Student struct {
 }
 
 func TestGenerateSql(t *testing.T) {
-	//sql-driver := GenInsertSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student")
-	//log.Println(sql-driver)
-	//sql-driver = GenUpdateSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student", 2)
-	//log.Println(sql-driver)
-	//sql-driver = GenGetByIdSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student", 2)
-	//log.Println(sql-driver)
-	//sql-driver = GenGetListSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student", 1, 10)
-	//log.Println(sql-driver)
+	//database-sql := GenInsertSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student")
+	//log.Println(database-sql)
+	//database-sql = GenUpdateSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student", 2)
+	//log.Println(database-sql)
+	//database-sql = GenGetByIdSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student", 2)
+	//log.Println(database-sql)
+	//database-sql = GenGetListSQL(&Student{Name: "张三", Age: 18, Class:"大二"}, "student", 1, 10)
+	//log.Println(database-sql)
 	//ConditionSQL([]string{"name", "age"})
 	//s := "hello yes"
 	//fmt.Println(strings.Trim(s, "he"))

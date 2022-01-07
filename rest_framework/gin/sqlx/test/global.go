@@ -3,7 +3,7 @@ package main
 import (
 	sqlx2 "GoRestFramework/rest_framework/gin/sqlx"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-database-sql/mysql"
 	"github.com/jmoiron/sqlx"
 )
 
