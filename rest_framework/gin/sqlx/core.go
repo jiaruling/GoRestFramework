@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
-	"sync"
 )
 
 /*
@@ -22,8 +21,8 @@ type ViewAPI interface {
 	UpdateViewAPI(c *gin.Context)
 	ListViewAPI(c *gin.Context)
 	RetrieveViewAPI(c *gin.Context)
+	GetModelIsInit() (ok bool) // 判断模型是否初始化
 }
-
 
 type CreateField struct {
 	CreatedFields        []string // 新增忽略字段
@@ -55,22 +54,22 @@ type SelectFieldList struct {
 }
 
 type Model struct {
-	M       interface{} // 模型实例指针, *必传
-	Table   string      // 表名
+	M     interface{} // 模型实例指针, *必传
+	Table string      // 表名
 	CreateField
 	SoftDeleteField
 	UpdateField
 	SelectField
 	SelectFieldList
-	lock sync.Mutex
+	//Lock sync.Mutex
 }
 
-func (m *Model) CreateViewAPI(c *gin.Context) {
+func (m Model) CreateViewAPI(c *gin.Context) {
 	// 加锁和释放锁
-	m.lock.Lock()
-	defer m.lock.Unlock()
+	//m.Lock.Lock()
+	//defer m.Lock.Unlock()
 	// 重置结构体
-	defer initModel(m.M)
+	//defer initModel(m.M)
 	// 1. 表单验证
 	if err := c.ShouldBindJSON(&m.M); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -85,7 +84,7 @@ func (m *Model) CreateViewAPI(c *gin.Context) {
 		return
 	}
 	// 重置结构体
-	initModel(m.M)
+	//initModel(m.M)
 	// 查询插入后的数据
 	sql = GenGetByIdSQL(m.M, m.Table, lastId, m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, "")
 	log.Println(sql)
@@ -99,12 +98,12 @@ func (m *Model) CreateViewAPI(c *gin.Context) {
 	return
 }
 
-func (m *Model) DeleteViewAPI(c *gin.Context) {
+func (m Model) DeleteViewAPI(c *gin.Context) {
 	// 加锁和释放锁
-	m.lock.Lock()
-	defer m.lock.Unlock()
+	//m.Lock.Lock()
+	//defer m.Lock.Unlock()
 	// 重置结构体
-	defer initModel(m.M)
+	//defer initModel(m.M)
 	// 1. 表单验证
 	IdStr := c.Param("id")
 	Id, err := strconv.Atoi(strings.Trim(IdStr, "/"))
@@ -133,12 +132,12 @@ func (m *Model) DeleteViewAPI(c *gin.Context) {
 	return
 }
 
-func (m *Model) UpdateViewAPI(c *gin.Context) {
+func (m Model) UpdateViewAPI(c *gin.Context) {
 	// 加锁和释放锁
-	m.lock.Lock()
-	defer m.lock.Unlock()
+	//m.Lock.Lock()
+	//defer m.Lock.Unlock()
 	// 重置结构体
-	defer initModel(m.M)
+	//defer initModel(m.M)
 	// 1. 表单验证
 	IdStr := c.Param("id")
 	Id, err := strconv.Atoi(strings.Trim(IdStr, "/"))
@@ -160,7 +159,7 @@ func (m *Model) UpdateViewAPI(c *gin.Context) {
 		return
 	}
 	// 重置结构体
-	initModel(m.M)
+	//initModel(m.M)
 	// 查询修改后的数据
 	sql = GenGetByIdSQL(m.M, m.Table, int64(Id), m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, "")
 	log.Println(sql)
@@ -174,10 +173,10 @@ func (m *Model) UpdateViewAPI(c *gin.Context) {
 	return
 }
 
-func (m *Model) ListViewAPI(c *gin.Context) {
+func (m Model) ListViewAPI(c *gin.Context) {
 	// 加锁和释放锁
-	m.lock.Lock()
-	defer m.lock.Unlock()
+	//m.Lock.Lock()
+	//defer m.Lock.Unlock()
 	//// 重置结构体
 	//defer initModel(m.M)
 	// 1. 页码处理
@@ -217,10 +216,10 @@ func (m *Model) ListViewAPI(c *gin.Context) {
 	return
 }
 
-func (m *Model) RetrieveViewAPI(c *gin.Context) {
+func (m Model) RetrieveViewAPI(c *gin.Context) {
 	// 加锁和释放锁
-	m.lock.Lock()
-	defer m.lock.Unlock()
+	//m.Lock.Lock()
+	//defer m.Lock.Unlock()
 	//// 重置结构体
 	//defer initModel(m.M)
 	// 1. 表单验证
@@ -242,4 +241,13 @@ func (m *Model) RetrieveViewAPI(c *gin.Context) {
 	// 3. 返回结果
 	c.JSON(http.StatusOK, gin.H{"code": http.StatusOK, "msg": "success", "data": m.M})
 	return
+}
+
+// 判断模型是否初始化
+func (m Model) GetModelIsInit() (ok bool) {
+	if m.M == nil {
+		return false
+	} else {
+		return true
+	}
 }

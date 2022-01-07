@@ -2,7 +2,6 @@ package sqlx
 
 import (
 	"github.com/gin-gonic/gin"
-	"reflect"
 	"strconv"
 )
 
@@ -78,16 +77,16 @@ func Paging(c *gin.Context, PageMax, PageMin int64) (page, pageSize int) {
 }
 
 // 初始化model
-func initModel(M interface{}) {
-	t := reflect.TypeOf(M)
-	v := reflect.ValueOf(M)
-	for i := 0; i < t.Elem().NumField(); i++ {
-		ty := t.Elem().Field(i).Type.Name()
-		switch ty {
-		case "string":
-			v.Elem().Field(i).SetString("")
-		default:
-			v.Elem().Field(i).SetInt(0)
-		}
-	}
-}
+//func initModel(M interface{}) {
+//	t := reflect.TypeOf(M)
+//	v := reflect.ValueOf(M)
+//	for i := 0; i < t.Elem().NumField(); i++ {
+//		ty := t.Elem().Field(i).Type.Name()
+//		switch ty {
+//		case "string":
+//			v.Elem().Field(i).SetString("")
+//		default:
+//			v.Elem().Field(i).SetInt(0)
+//		}
+//	}
+//}

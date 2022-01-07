@@ -1,4 +1,4 @@
-package test
+package main
 
 import (
 	sqlx2 "GoRestFramework/rest_framework/gin/sqlx"
@@ -27,7 +27,7 @@ func init() {
 	sqlx2.GlobalPageMin = 1
 }
 
-var stu = &sqlx2.Model{
+var stu = sqlx2.Model{
 	M:     &Student{},
 	Table: "student",
 	CreateField: sqlx2.CreateField{
