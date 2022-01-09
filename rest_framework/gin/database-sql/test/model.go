@@ -1,6 +1,8 @@
 package main
 
-import sqlx2 "GoRestFramework/rest_framework/gin/sqlx"
+import (
+	database_sql "GoRestFramework/rest_framework/gin/database-sql"
+)
 
 /*
    功能说明:
@@ -19,27 +21,27 @@ type Student struct {
 	DeletedAt int64  `json:"deleted_at,omitempty" db:"deleted_at"`
 }
 
-var stu = sqlx2.Model{
+var stu = database_sql.Model{
 	M:     nil, // M: new(Student) 传入模型的结构体指针
 	Table: "student",
-	CreateField: sqlx2.CreateField{
+	CreateField: database_sql.CreateField{
 		CreatedFields:        nil,
 		CreatedIgnoreFields:  []string{"deleted_at"},
 		CreatedSetTimeFields: []string{"created_at", "updated_at"},
 	},
-	SoftDeleteField: sqlx2.SoftDeleteField{
+	SoftDeleteField: database_sql.SoftDeleteField{
 		DeletedFields: "deleted_at",
 	},
-	UpdateField: sqlx2.UpdateField{
+	UpdateField: database_sql.UpdateField{
 		UpdateFields:        nil,
 		UpdateIgnoreFields:  []string{"created_at", "deleted_at"},
 		UpdateSetTimeFields: []string{"updated_at"},
 	},
-	SelectField: sqlx2.SelectField{
+	SelectField: database_sql.SelectField{
 		SelectFields:       nil,
 		SelectIgnoreFields: []string{"created_at", "updated_at", "deleted_at"},
 	},
-	SelectFieldList: sqlx2.SelectFieldList{
+	SelectFieldList: database_sql.SelectFieldList{
 		Search:  []string{"name", "age"},
 		Filter:  nil,
 		Sort:    []string{"id"},

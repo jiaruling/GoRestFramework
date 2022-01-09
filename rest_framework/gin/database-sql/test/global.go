@@ -1,10 +1,10 @@
 package main
 
 import (
-	sqlx2 "GoRestFramework/rest_framework/gin/sqlx"
+	database_sql "GoRestFramework/rest_framework/gin/database-sql"
+	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 )
 
 /*
@@ -15,16 +15,16 @@ import (
 */
 
 func init() {
-	database, err := sqlx.Open("mysql", "root:abc123456@tcp(127.0.0.1:3306)/imooc")
+	database, err := sql.Open("mysql", "root:abc123456@tcp(127.0.0.1:3306)/imooc")
 	if err != nil {
 		fmt.Println("open mysql failed,", err)
 		return
 	}
 	//defer database.Close()  // 注意这行代码要写在上面err判断的下面
-	sqlx2.RDB = database
-	sqlx2.WDB = database
-	sqlx2.GlobalPageMax = 5
-	sqlx2.GlobalPageMin = 1
+	database_sql.RDB = database
+	database_sql.WDB = database
+	database_sql.GlobalPageMax = 5
+	database_sql.GlobalPageMin = 1
 }
 
 

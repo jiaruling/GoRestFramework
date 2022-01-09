@@ -1,4 +1,4 @@
-package sqlx
+package database_sql
 
 import (
 	"github.com/gin-gonic/gin"
