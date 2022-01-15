@@ -1,6 +1,8 @@
-package sqlx
+package gorms
 
-import "github.com/jmoiron/sqlx"
+import (
+	"gorm.io/gorm"
+)
 
 /*
    功能说明: 包内常量
@@ -10,8 +12,8 @@ import "github.com/jmoiron/sqlx"
 */
 
 var (
-	RDB           *sqlx.DB
-	WDB           *sqlx.DB
+	RDB           *gorm.DB
+	WDB           *gorm.DB
 	GlobalPageMax int64
 	GlobalPageMin int64
 	LogPath       = "./database-sql.log"

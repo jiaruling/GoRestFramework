@@ -16,4 +16,5 @@ var (
 	WDB           *sql.DB
 	GlobalPageMax int64
 	GlobalPageMin int64
+	LogPath       = "./database-sql.log"
 )

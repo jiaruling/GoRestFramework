@@ -13,7 +13,7 @@ import (
    创建时间: 2021/12/15 13:41
 */
 func init() {
-	logFile, err := os.OpenFile("./database-sql.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	logFile, err := os.OpenFile(LogPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		fmt.Println("open log file failed, err:", err)
 		return
