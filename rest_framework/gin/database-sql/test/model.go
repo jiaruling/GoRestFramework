@@ -39,7 +39,7 @@ var stu = database_sql.Model{
 	},
 	SelectField: database_sql.SelectField{
 		SelectFields:       nil,
-		SelectIgnoreFields: []string{"created_at", "updated_at", "deleted_at"},
+		SelectIgnoreFields: []string{"deleted_at"},
 	},
 	SelectFieldList: database_sql.SelectFieldList{
 		Search:  []string{"name", "age"},

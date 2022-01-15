@@ -152,24 +152,24 @@ func GenUpdateSQL(m interface{}, table string, id int64, UpdateFields, UpdateIgn
 
 // *********************************************************************************************************************
 // 查询多条记录
-func GenGetListSQL(m interface{}, table string, page, pageSize int64, condition, order string, fields, exFields []string, deleteField, all string) (sql string) {
-	field := QueryFields(m, fields, exFields)
+func GenGetListSQL(m interface{}, table string, page, pageSize int64, condition, order string, fields, exFields []string, deleteField, all string) (sql string, queryField []string) {
+	field, queryField := QueryFields(m, fields, exFields)
 	if deleteField == "" || all != "" {
 		if condition == "" {
-			return "SELECT " + field + " FROM " + table + fmt.Sprintf(" %s LIMIT %d OFFSET %d;", order, pageSize, (page-1)*pageSize)
+			return "SELECT " + field + " FROM " + table + fmt.Sprintf(" %s LIMIT %d OFFSET %d;", order, pageSize, (page-1)*pageSize), queryField
 		}
-		return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE %s %s LIMIT %d OFFSET %d;", strings.Trim(condition, " AND"), order, pageSize, (page-1)*pageSize)
+		return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE %s %s LIMIT %d OFFSET %d;", strings.Trim(condition, " AND"), order, pageSize, (page-1)*pageSize), queryField
 	}
-	return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE %s is null %s %s LIMIT %d OFFSET %d;", deleteField, condition, order, pageSize, (page-1)*pageSize)
+	return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE %s is null %s %s LIMIT %d OFFSET %d;", deleteField, condition, order, pageSize, (page-1)*pageSize), queryField
 }
 
 // 根据ID查询一条记录
-func GenGetByIdSQL(m interface{}, table string, id int64, fields, exFields []string, deleteField, all string) (sql string) {
-	field := QueryFields(m, fields, exFields)
+func GenGetByIdSQL(m interface{}, table string, id int64, fields, exFields []string, deleteField, all string) (sql string, queryField []string) {
+	field, queryField := QueryFields(m, fields, exFields)
 	if deleteField == "" || all != "" {
-		return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE id=%d;", id)
+		return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE id=%d;", id), queryField
 	}
-	return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE id=%d and %s is null;", id, deleteField)
+	return "SELECT " + field + " FROM " + table + fmt.Sprintf(" WHERE id=%d and %s is null;", id, deleteField), queryField
 }
 
 // 查询记录总数
@@ -187,7 +187,8 @@ func GenGetTotalSQL(table string, condition, deleteField, all string) (sql strin
 
 // *********************************************************************************************************************
 // 查询字段
-func QueryFields(m interface{}, fields, exFields []string) (field string) {
+func QueryFields(m interface{}, fields, exFields []string) (field string, queryField []string) {
+	queryField = make([]string, 0)
 	t := reflect.TypeOf(m)
 	if len(fields) == 0 {
 		for i := 0; i < t.Elem().NumField(); i++ {
@@ -197,6 +198,7 @@ func QueryFields(m interface{}, fields, exFields []string) (field string) {
 			if inExFields(tag, exFields) {
 				continue
 			}
+			queryField = append(queryField, tag)
 			field = handlerField(tag, re, ty, field)
 		}
 	} else {
@@ -205,6 +207,7 @@ func QueryFields(m interface{}, fields, exFields []string) (field string) {
 			re := t.Elem().Field(i).Tag.Get("binding")
 			ty := t.Elem().Field(i).Type.Name()
 			if inFields(tag, fields) {
+				queryField = append(queryField, tag)
 				field = handlerField(tag, re, ty, field)
 			}
 		}

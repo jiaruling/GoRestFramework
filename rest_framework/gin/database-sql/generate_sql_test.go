@@ -1,8 +1,6 @@
 package database_sql
 
 import (
-	"fmt"
-	"strings"
 	"testing"
 )
 
@@ -37,6 +35,6 @@ func TestGenerateSql(t *testing.T) {
 	//fmt.Println(strings.Trim(s, "he"))
 	//fmt.Println(strings.Trim(s, "es"))
 	//fmt.Println(strings.Trim(s, "ll"))
-	s := "id,omitempty"
-	fmt.Println(strings.Split(s, ",")[0])
+	//s := "id,omitempty"
+	//fmt.Println(strings.Split(s, ",")[0])
 }

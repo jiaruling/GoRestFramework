@@ -1,7 +1,10 @@
 package database_sql
 
 import (
+	"encoding/json"
 	"fmt"
+	"reflect"
+	"strings"
 )
 
 /*
@@ -21,34 +24,30 @@ func ExecDB(sql string) (lastId int64, err error) {
 }
 
 // 列表查询
-func getListDB(sql string, m interface{}) (list []map[string]interface{}, err error) {
+func getListDB(sql string, m interface{}, filed []string) (list []map[string]interface{}, err error) {
 	fmt.Println(sql)
 	list = make([]map[string]interface{}, 0)
 	rows, err := RDB.Query(sql)
 	if err != nil {
 		return nil, err
 	}
-	filed := []string{"id", "name", "age", "class"}
+	l, err := fieldHandle(filed, m)
+	if err != nil {
+		return nil, err
+	}
 	for rows.Next() {
 		newMap :=  make(map[string]interface{})
-		l := make([]interface{},len(filed), len(filed))
-		fmt.Println(l)
-		err := rows.Scan(l...)
+		err = rows.Scan(l...)
 		if err != nil {
 			return nil, err
 		}
-		for i, v := range filed {
-			newMap[v] = l[i]
+		b, err := json.Marshal(m)
+		if err != nil {
+			return nil, err
 		}
-		fmt.Println(newMap)
-		//b, err := json.Marshal(m)
-		//if err != nil {
-		//	return nil, err
-		//}
-		//newMap :=  make(map[string]interface{})
-		//if err := json.Unmarshal(b, &newMap); err != nil {
-		//	return nil, err
-		//}
+		if err := json.Unmarshal(b, &newMap); err != nil {
+			return nil, err
+		}
 		list = append(list, newMap)
 	}
 	return
@@ -61,18 +60,33 @@ func getTotalDB(sql string) (total int64) {
 }
 
 // 单条记录查询
-func getByIdDB(m interface{}, sql string) (err error) {
-	err = RDB.QueryRow(sql).Scan(m)
+func getByIdDB(m interface{}, sql string, filed []string) (err error) {
+	l, err := fieldHandle(filed, m)
+	if err != nil {
+		return err
+	}
+	err = RDB.QueryRow(sql).Scan(l...)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-//func fieldHandle(filed []string, l *[]interface{},m interface{}) (err error) {
-//	t := reflect.TypeOf(m)
-//	for i, v = range filed {
-//
-//	}
-//	return
-//}
+// 查询字段处理
+func fieldHandle(filed []string, m interface{}) (l []interface{},err error) {
+	n := m
+	t := reflect.TypeOf(n)
+	v := reflect.ValueOf(n)
+	l = make([]interface{},0)
+	for _, item := range filed {
+		for i := 0; i < t.Elem().NumField(); i++ {
+			f := t.Elem().Field(i)
+			if item == strings.Split(f.Tag.Get("json"), ",")[0] {
+				l = append(l, v.Elem().Field(i).Addr().Interface())
+				break
+			}
+		}
+	}
+	fmt.Println(l)
+	return
+}

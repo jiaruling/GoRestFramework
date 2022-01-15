@@ -25,7 +25,7 @@ type ViewAPI interface {
 }
 
 type CreateField struct {
-	CreatedFields        []string // 新增忽略字段
+	CreatedFields        []string // 新增字段
 	CreatedIgnoreFields  []string // 新增忽略字段 if len(CreatedFields) > 0 此字段不生效
 	CreatedSetTimeFields []string // 新增时设置为当前时间字段
 }
@@ -35,14 +35,14 @@ type SoftDeleteField struct {
 }
 
 type UpdateField struct {
-	UpdateFields        []string // 修改忽略字段
+	UpdateFields        []string // 修改字段
 	UpdateIgnoreFields  []string // 修改忽略字段 if len(UpdateFields) > 0
 	UpdateSetTimeFields []string // 修改时设置为当前时间字段
 }
 
 type SelectField struct {
 	SelectFields       []string // 查询字段
-	SelectIgnoreFields []string // 忽略字段
+	SelectIgnoreFields []string // 查询忽略字段
 }
 
 type SelectFieldList struct {
@@ -78,9 +78,9 @@ func (m Model) CreateViewAPI(c *gin.Context) {
 		return
 	}
 	// 3.查询插入后的数据
-	sql = GenGetByIdSQL(m.M, m.Table, lastId, m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, "")
+	sql, queryList := GenGetByIdSQL(m.M, m.Table, lastId, m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, "")
 	log.Println(sql)
-	err = getByIdDB(m.M, sql)
+	err = getByIdDB(m.M, sql, queryList)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -141,9 +141,9 @@ func (m Model) UpdateViewAPI(c *gin.Context) {
 		return
 	}
 	// 3.查询修改后的数据
-	sql = GenGetByIdSQL(m.M, m.Table, int64(Id), m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, "")
+	sql, queryList := GenGetByIdSQL(m.M, m.Table, int64(Id), m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, "")
 	log.Println(sql)
-	err = getByIdDB(m.M, sql)
+	err = getByIdDB(m.M, sql, queryList)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -166,9 +166,9 @@ func (m Model) ListViewAPI(c *gin.Context) {
 	order := OrderSQL(c, m.Sort)
 	//fmt.Println(order)
 	// 查询列表
-	sql := GenGetListSQL(m.M, m.Table, int64(page), int64(pageSize), condition, order, m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, all)
+	sql, queryList := GenGetListSQL(m.M, m.Table, int64(page), int64(pageSize), condition, order, m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, all)
 	log.Println(sql)
-	list, err := getListDB(sql, m.M)
+	list, err := getListDB(sql, m.M, queryList)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -201,9 +201,9 @@ func (m Model) RetrieveViewAPI(c *gin.Context) {
 	}
 	all := c.DefaultQuery("all", "")
 	// 2. 数据库操作
-	sql := GenGetByIdSQL(m.M, m.Table, int64(Id), m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, all)
+	sql, queryList := GenGetByIdSQL(m.M, m.Table, int64(Id), m.SelectFields, m.SelectIgnoreFields, m.DeletedFields, all)
 	log.Println(sql)
-	err = getByIdDB(m.M, sql)
+	err = getByIdDB(m.M, sql, queryList)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
