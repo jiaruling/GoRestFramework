@@ -13,7 +13,6 @@
 - mysql-driver
 - sqlx
 - gorm
-- xorm
 - beego-orm
 
 ```sql
