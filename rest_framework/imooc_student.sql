@@ -1,3 +1,15 @@
+create table student
+(
+    id         int unsigned auto_increment
+        primary key,
+    created_at int unsigned null comment '创建时间戳',
+    updated_at int unsigned null comment '更新时间戳',
+    deleted_at int unsigned null comment '删除时间戳',
+    name       varchar(64)  null comment '名字',
+    age        tinyint      null comment '年龄',
+    class      varchar(64)  null comment '班级'
+)comment '学生';
+
 INSERT INTO imooc.student (created_at, updated_at, deleted_at, name, age, class) VALUES (1639541712, 1639541712, 123, '张三', 18, '大二');
 INSERT INTO imooc.student (created_at, updated_at, deleted_at, name, age, class) VALUES (1639541743, 1639541743, 123, '李四', 19, '大三');
 INSERT INTO imooc.student (created_at, updated_at, deleted_at, name, age, class) VALUES (1639541763, 1639541763, null, '王五', 18, '大四');
