@@ -3,9 +3,6 @@
 ## web 框架
 
 - gin
-- beego
-- echo
-- Iris
 - http【标准库】
 
 ## orm 框架
@@ -13,7 +10,6 @@
 - mysql-driver
 - sqlx
 - gorm
-- beego-orm
 
 ```sql
 create table student
