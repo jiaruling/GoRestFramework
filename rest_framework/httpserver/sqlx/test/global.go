@@ -1,7 +1,7 @@
 package main
 
 import (
-	sqlx2 "GoRestFramework/rest_framework/httpserver/sqlx"
+	"GoRestFramework/rest_framework/httpserver/sqlx"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -21,10 +21,10 @@ func init() {
 		return
 	}
 	//defer database.Close()  // 注意这行代码要写在上面err判断的下面
-	sqlx2.RDB = database
-	sqlx2.WDB = database
-	sqlx2.GlobalPageMax = 5
-	sqlx2.GlobalPageMin = 1
+	grf.RDB = database
+	grf.WDB = database
+	grf.GlobalPageMax = 5
+	grf.GlobalPageMin = 1
 }
 
 

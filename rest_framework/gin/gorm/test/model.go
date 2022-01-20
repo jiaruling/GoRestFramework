@@ -1,7 +1,7 @@
 package main
 
 import (
-	gorms "GoRestFramework/rest_framework/gin/gorm"
+	"GoRestFramework/rest_framework/gin/gorm"
 )
 
 /*
@@ -21,27 +21,27 @@ type Student struct {
 	DeletedAt int64  `json:"deleted_at,omitempty" db:"deleted_at"`
 }
 
-var stu = gorms.Model{
+var stu = grf.Model{
 	M:     nil, // M: new(Student) 传入模型的结构体指针
 	Table: "student",
-	CreateField: gorms.CreateField{
+	CreateField: grf.CreateField{
 		CreatedFields:        nil,
 		CreatedIgnoreFields:  []string{"deleted_at"},
 		CreatedSetTimeFields: []string{"created_at", "updated_at"},
 	},
-	SoftDeleteField: gorms.SoftDeleteField{
+	SoftDeleteField: grf.SoftDeleteField{
 		DeletedFields: "deleted_at",
 	},
-	UpdateField: gorms.UpdateField{
+	UpdateField: grf.UpdateField{
 		UpdateFields:        nil,
 		UpdateIgnoreFields:  []string{"created_at", "deleted_at"},
 		UpdateSetTimeFields: []string{"updated_at"},
 	},
-	SelectField: gorms.SelectField{
+	SelectField: grf.SelectField{
 		SelectFields:       nil,
 		SelectIgnoreFields: []string{"created_at", "updated_at", "deleted_at"},
 	},
-	SelectFieldList: gorms.SelectFieldList{
+	SelectFieldList: grf.SelectFieldList{
 		Search:  []string{"name", "age"},
 		Filter:  nil,
 		Sort:    []string{"id"},

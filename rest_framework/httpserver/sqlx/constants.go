@@ -1,4 +1,4 @@
-package sqlx
+package grf
 
 import "github.com/jmoiron/sqlx"
 

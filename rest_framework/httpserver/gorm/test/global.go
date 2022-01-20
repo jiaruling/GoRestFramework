@@ -1,7 +1,7 @@
 package main
 
 import (
-	gorms "GoRestFramework/rest_framework/httpserver/gorm"
+	"GoRestFramework/rest_framework/httpserver/gorm"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -21,8 +21,8 @@ func init() {
 		return
 	}
 	//defer database.Close()  // 注意这行代码要写在上面err判断的下面
-	gorms.RDB = database
-	gorms.WDB = database
-	gorms.GlobalPageMax = 5
-	gorms.GlobalPageMin = 1
+	grf.RDB = database
+	grf.WDB = database
+	grf.GlobalPageMax = 5
+	grf.GlobalPageMin = 1
 }

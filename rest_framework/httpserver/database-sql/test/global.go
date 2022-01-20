@@ -1,7 +1,7 @@
 package main
 
 import (
-	database_sql "GoRestFramework/rest_framework/httpserver/database-sql"
+	"GoRestFramework/rest_framework/httpserver/database-sql"
 	"database/sql"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
@@ -21,10 +21,10 @@ func init() {
 		return
 	}
 	//defer database.Close()  // 注意这行代码要写在上面err判断的下面
-	database_sql.RDB = database
-	database_sql.WDB = database
-	database_sql.GlobalPageMax = 5
-	database_sql.GlobalPageMin = 1
+	grf.RDB = database
+	grf.WDB = database
+	grf.GlobalPageMax = 5
+	grf.GlobalPageMin = 1
 }
 
 

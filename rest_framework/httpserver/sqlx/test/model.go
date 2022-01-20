@@ -1,6 +1,6 @@
 package main
 
-import sqlx2 "GoRestFramework/rest_framework/httpserver/sqlx"
+import "GoRestFramework/rest_framework/httpserver/sqlx"
 
 /*
    功能说明:
@@ -19,27 +19,27 @@ type Student struct {
 	DeletedAt int64  `json:"deleted_at,omitempty" db:"deleted_at"`
 }
 
-var stu = sqlx2.Model{
+var stu = grf.Model{
 	M:     nil, // M: new(Student) 传入模型的结构体指针
 	Table: "student",
-	CreateField: sqlx2.CreateField{
+	CreateField: grf.CreateField{
 		CreatedFields:        nil,
 		CreatedIgnoreFields:  []string{"deleted_at"},
 		CreatedSetTimeFields: []string{"created_at", "updated_at"},
 	},
-	SoftDeleteField: sqlx2.SoftDeleteField{
+	SoftDeleteField: grf.SoftDeleteField{
 		DeletedFields: "deleted_at",
 	},
-	UpdateField: sqlx2.UpdateField{
+	UpdateField: grf.UpdateField{
 		UpdateFields:        nil,
 		UpdateIgnoreFields:  []string{"created_at", "deleted_at"},
 		UpdateSetTimeFields: []string{"updated_at"},
 	},
-	SelectField: sqlx2.SelectField{
+	SelectField: grf.SelectField{
 		SelectFields:       nil,
 		SelectIgnoreFields: []string{"deleted_at"},
 	},
-	SelectFieldList: sqlx2.SelectFieldList{
+	SelectFieldList: grf.SelectFieldList{
 		Search:  []string{"name", "age"},
 		Filter:  nil,
 		Sort:    []string{"id"},

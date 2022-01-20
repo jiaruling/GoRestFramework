@@ -15,14 +15,14 @@ import (
 
 func main() {
 	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		gorms.Handler200(w, "pong")
+		grf.Handler200(w, "pong")
 		return
 	})
 	http.HandleFunc("/stu", func(w http.ResponseWriter, r *http.Request) {
 		// 通过全局变量赋值给局部变量，可以实现并发
 		s := stu
 		s.M = new(Student)
-		gorms.Dispatcher(s, w, r)
+		grf.Dispatcher(s, w, r)
 		fmt.Printf("stu: %p -- s:%p \n", &stu, &s)
 		fmt.Printf("stu.M: %p -- s.M:%p \n", &stu.M, &s.M)
 		fmt.Printf("stu.T: %p -- s.T:%p \n", &stu.Table, &s.Table)
