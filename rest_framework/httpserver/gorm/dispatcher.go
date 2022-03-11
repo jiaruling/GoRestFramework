@@ -13,24 +13,28 @@ import (
 
 func Dispatcher(m ViewAPI, w http.ResponseWriter, r *http.Request) {
 	if !m.GetModelIsInit() {
-		Handler500(w,"模型没有初始化, 不能进行操作")
+		Handler500(w, "模型没有初始化, 不能进行操作")
 		return
 	}
-	switch r.Method {
-	case "GET":
-		id := r.URL.Query().Get("id")
-		if id == "" {
-			m.ListViewAPI(w, r)
-		} else {
-			m.RetrieveViewAPI(w, r)
+	if inFields(r.Method, m.GetAllowMethod()) {
+		switch r.Method {
+		case "GET":
+			id := r.URL.Query().Get("id")
+			if id == "" {
+				m.ListViewAPI(w, r)
+			} else {
+				m.RetrieveViewAPI(w, r)
+			}
+		case "POST":
+			m.CreateViewAPI(w, r)
+		case "PUT":
+			m.UpdateViewAPI(w, r)
+		case "DELETE":
+			m.DeleteViewAPI(w, r)
+		default:
+			Handler400(w, "请求方式不被允许", nil)
 		}
-	case "POST":
-		m.CreateViewAPI(w, r)
-	case "PUT":
-		m.UpdateViewAPI(w, r)
-	case "DELETE":
-		m.DeleteViewAPI(w, r)
-	default:
+	} else {
 		Handler400(w, "请求方式不被允许", nil)
 	}
 	return
